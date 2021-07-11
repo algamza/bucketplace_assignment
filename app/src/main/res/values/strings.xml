@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">BucketPlaceTest</string>
+    <string name="STR_HOME">홈</string>
+    <string name="STR_PHOTO_FEED">사진피드</string>
+    <string name="STR_CARD_SELECT_DESCRIPTION">인기 카드 : 카드를 클릭해보세요.</string>
+    <string name="STR_USER_SELECT_DESCRIPTION">인기 유저 : 유저를 클릭해보세요.</string>
+    <string name="STR_RECOMMEND_CARD_SELECT_DESCRIPTION">추천 카드 : 카드를 클릭해보세요.</string>
+    <string name="STR_NICKNAME">닉네임</string>
+    <string name="STR_INTRODUCTION">소개</string>
+    <string name="STR_PASSWORD">비밀번호</string>
+    <string name="STR_SIGNUP">가입</string>
+    <string name="STR_LOGIN">로그인</string>
+    <string name="STR_LOGOUT">로그아웃</string>
+    <string name="STR_NICKNAME_VALUE">닉네임: %1$s</string>
+    <string name="STR_INTRODUCTION_VALUE">소개: %1$s</string>
+    <string name="STR_CARD_DESCRIPTION_VALUE">카드 설명: %1$s</string>
+    <string name="STR_WRITER_VALUE">작성자: %1$s</string>
+</resources>
