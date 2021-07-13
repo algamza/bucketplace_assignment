@@ -3,6 +3,7 @@
 
 ### Technologies & Methodologies which used:
 
+- Clean Architecture
 - MVVM Pattern
 - LiveData
 - Databinding
