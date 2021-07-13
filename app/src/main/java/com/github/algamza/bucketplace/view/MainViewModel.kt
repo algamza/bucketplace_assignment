@@ -1,17 +1,14 @@
 package com.github.algamza.bucketplace.view
 
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
-import com.github.algamza.bucketplace.repository.Repository
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
+import com.github.algamza.bucketplace.domain.usecase.UserUseCase
 
 class MainViewModel @ViewModelInject constructor(
-    private val repository: Repository,
-    @Assisted private val savedStateHandle: SavedStateHandle
+    private val userUseCase: UserUseCase
 ) : ViewModel() {
-    val login: LiveData<Boolean> = Transformations.map(repository.login) { it }
-
-    fun logout() = repository.requestLogout()
-
+    val login: LiveData<Boolean> = Transformations.map(userUseCase.isLogin()) { it }
+    fun logout() = userUseCase.requestLogout()
 }

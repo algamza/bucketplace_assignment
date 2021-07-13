@@ -1,14 +1,14 @@
 package com.github.algamza.bucketplace.view.card
 
-import android.util.Log
-import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
-import com.github.algamza.bucketplace.repository.Repository
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
+import com.github.algamza.bucketplace.domain.usecase.CardUseCase
 
 class CardViewModel @ViewModelInject constructor(
-    private val repository: Repository,
-    @Assisted private val savedStateHandle: SavedStateHandle
+    private val cardUseCase: CardUseCase
 ) : ViewModel() {
     private val _cardCallbackObj: MutableLiveData<CardCallback> = MutableLiveData()
     private val _user: MutableLiveData<User> = MutableLiveData()
@@ -22,18 +22,18 @@ class CardViewModel @ViewModelInject constructor(
     lateinit var recommends: LiveData<List<Recommend>>
 
     fun updateCard(id: Int) {
-        recommends = Transformations.map(repository.getCard(id)) {
+        recommends = Transformations.map(cardUseCase.getCardDetail(id)) {
             _user.postValue(User(it.user.id, it.user.nickname, it.user.introduction))
             _card.postValue(Card(it.card.id, it.card.user_id, it.card.img_url, it.card.description))
             it.recommend_cards.map { Recommend(recommendCallback, it.id, it.user_id, it.img_url, it.description) }
         }
     }
 
-    private var recommendCallback = (object: Recommend.Callback {
+    private var recommendCallback = object: Recommend.Callback {
         override fun onClickCard(id: Int) {
             _cardCallbackObj.postValue(CardCallback(id))
         }
-    })
+    }
 
     data class CardCallback(val id: Int)
 

@@ -1,13 +1,14 @@
 package com.github.algamza.bucketplace.view.home
 
-import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
-import com.github.algamza.bucketplace.repository.Repository
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
+import com.github.algamza.bucketplace.domain.usecase.HomeUseCase
 
 class HomeViewModel @ViewModelInject constructor(
-    private val repository: Repository,
-    @Assisted private val savedStateHandle: SavedStateHandle
+    private val homeUseCase: HomeUseCase
 ) : ViewModel() {
     private val _userCallbackObj: MutableLiveData<UserCallback> = MutableLiveData()
     private val _cardCallbackObj: MutableLiveData<CardCallback> = MutableLiveData()
@@ -18,22 +19,22 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _cardCallbackObj
     val users: LiveData<List<UserData>>
         get() = _users
-    var cards: LiveData<List<CardData>> = Transformations.map(repository.home) {
+    var cards: LiveData<List<CardData>> = Transformations.map(homeUseCase.getHome()) {
         _users.postValue(it.popular_users.map { UserData(userCallback, it.id, it.nickname, it.introduction) })
         it.popular_cards.map { CardData(cardCallback, it.id, it.user_id, it.img_url, it.description) }
     }
 
-    private var userCallback = (object: UserData.Callback {
+    private var userCallback = object: UserData.Callback {
         override fun onClickUser(id: Int) {
             _userCallbackObj.postValue(UserCallback(id))
         }
-    })
+    }
 
-    private var cardCallback = (object: CardData.Callback {
+    private var cardCallback = object: CardData.Callback {
         override fun onClickCard(id: Int) {
             _cardCallbackObj.postValue(CardCallback(id))
         }
-    })
+    }
 
     data class UserCallback(val id: Int)
     data class CardCallback(val id: Int)
