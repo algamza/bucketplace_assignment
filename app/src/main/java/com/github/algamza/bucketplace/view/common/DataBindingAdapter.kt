@@ -19,5 +19,6 @@ fun loadImg(view: ImageView, url: String?){
     if ( url == null ) return
     Glide.with(view.context)
         .load(url)
+        .error(R.drawable.img_error)
         .into(view)
 }
