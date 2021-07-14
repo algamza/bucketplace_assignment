@@ -40,13 +40,13 @@ class CardFragment : Fragment() {
         viewModel.recommends.observe(viewLifecycleOwner) { adapter.setData(it)}
         viewModel.cardCallbackObj.observe(viewLifecycleOwner) {
             requireActivity().supportFragmentManager.beginTransaction().addToBackStack(null)
-                .replace(R.id.nav_host, newInstance(it.id)).commit()
+                .add(R.id.nav_host, newInstance(it.id)).commit()
         }
         return binding.root
     }
 
     fun onClickUser(id: Int) {
         requireActivity().supportFragmentManager.beginTransaction().addToBackStack(null)
-            .replace(R.id.nav_host, UserFragment.newInstance(id)).commit()
+            .add(R.id.nav_host, UserFragment.newInstance(id)).commit()
     }
 }
