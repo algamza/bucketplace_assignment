@@ -1,10 +1,7 @@
 package com.github.algamza.bucketplace.view.home
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.github.algamza.bucketplace.domain.usecase.HomeUseCase
 
 class HomeViewModel @ViewModelInject constructor(
@@ -19,7 +16,7 @@ class HomeViewModel @ViewModelInject constructor(
         get() = _cardCallbackObj
     val users: LiveData<List<UserData>>
         get() = _users
-    var cards: LiveData<List<CardData>> = Transformations.map(homeUseCase.getHome()) {
+    var cards: LiveData<List<CardData>> = homeUseCase.getHome().asLiveData().map {
         _users.postValue(it.popular_users.map { UserData(userCallback, it.id, it.nickname, it.introduction) })
         it.popular_cards.map { CardData(cardCallback, it.id, it.user_id, it.img_url, it.description) }
     }

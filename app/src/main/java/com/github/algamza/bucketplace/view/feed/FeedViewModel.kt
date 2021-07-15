@@ -1,10 +1,7 @@
 package com.github.algamza.bucketplace.view.feed
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.github.algamza.bucketplace.domain.usecase.CardUseCase
 
 
@@ -14,7 +11,7 @@ class FeedViewModel @ViewModelInject constructor(
     private val _cardCallbackObj: MutableLiveData<CardCallback> = MutableLiveData()
     val cardCallbackObj: LiveData<CardCallback>
         get() = _cardCallbackObj
-    var feed: LiveData<List<FeedData>> = Transformations.map(cardUseCase.getFeeds()) {
+    var feed: LiveData<List<FeedData>> = cardUseCase.getFeeds().asLiveData().map {
         it.map { FeedData(callback, it.id, it.user_id, it.img_url, it.description) }
     }
 

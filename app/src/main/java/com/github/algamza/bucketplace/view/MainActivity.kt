@@ -1,16 +1,13 @@
 package com.github.algamza.bucketplace.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.github.algamza.bucketplace.R
 import com.github.algamza.bucketplace.databinding.ActivityMainBinding
-import com.github.algamza.bucketplace.view.home.HomeViewModel
 import com.github.algamza.bucketplace.view.signin.SignInFragment
 import com.github.algamza.bucketplace.view.signup.SignUpFragment
 import dagger.hilt.android.AndroidEntryPoint

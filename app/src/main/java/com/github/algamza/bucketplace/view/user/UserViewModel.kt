@@ -2,8 +2,9 @@ package com.github.algamza.bucketplace.view.user
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.map
 import com.github.algamza.bucketplace.domain.usecase.UserUseCase
 
 class UserViewModel @ViewModelInject constructor(
@@ -12,9 +13,7 @@ class UserViewModel @ViewModelInject constructor(
     lateinit var user: LiveData<User>
 
     fun updateUser(id: Int) {
-        user = Transformations.map(userUseCase.getUser(id)) {
-            User(it.nickname, it.introduction)
-        }
+        user = userUseCase.getUser(id).asLiveData().map { User(it.nickname, it.introduction) }
     }
 
     data class User(

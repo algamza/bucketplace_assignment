@@ -1,10 +1,7 @@
 package com.github.algamza.bucketplace.view.card
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.github.algamza.bucketplace.domain.usecase.CardUseCase
 
 class CardViewModel @ViewModelInject constructor(
@@ -22,7 +19,7 @@ class CardViewModel @ViewModelInject constructor(
     lateinit var recommends: LiveData<List<Recommend>>
 
     fun updateCard(id: Int) {
-        recommends = Transformations.map(cardUseCase.getCardDetail(id)) {
+        recommends = cardUseCase.getCardDetail(id).asLiveData().map {
             _user.postValue(User(it.user.id, it.user.nickname, it.user.introduction))
             _card.postValue(Card(it.card.id, it.card.user_id, it.card.img_url, it.card.description))
             it.recommend_cards.map { Recommend(recommendCallback, it.id, it.user_id, it.img_url, it.description) }

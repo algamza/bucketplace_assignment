@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import com.github.algamza.bucketplace.R
 import com.github.algamza.bucketplace.databinding.FragmentHomeBinding
 import com.github.algamza.bucketplace.view.card.CardFragment
-import com.github.algamza.bucketplace.view.signup.SignUpFragment
 import com.github.algamza.bucketplace.view.user.UserFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

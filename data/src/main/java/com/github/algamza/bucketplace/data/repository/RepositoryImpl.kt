@@ -1,18 +1,17 @@
 package com.github.algamza.bucketplace.data.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.map
+import com.github.algamza.bucketplace.data.local.dao.CardDao
+import com.github.algamza.bucketplace.data.local.entities.*
+import com.github.algamza.bucketplace.data.remote.RemoteRepo
 import com.github.algamza.bucketplace.domain.model.Card
 import com.github.algamza.bucketplace.domain.model.CardDetail
 import com.github.algamza.bucketplace.domain.model.Home
 import com.github.algamza.bucketplace.domain.model.User
-import com.github.algamza.bucketplace.data.local.dao.CardDao
-import com.github.algamza.bucketplace.data.local.entities.*
-import com.github.algamza.bucketplace.data.remote.RemoteRepo
 import com.github.algamza.bucketplace.domain.repository.Repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,9 +19,9 @@ class RepositoryImpl @Inject constructor(
     private var cardDao: CardDao,
     private var remoteRepo: RemoteRepo) : Repository {
 
-    override fun getHome(): LiveData<Home> {
+    override fun getHome(): Flow<Home> {
         requestHome()
-        return Transformations.map(cardDao.getHomeEntity(0)) {
+        return cardDao.getHomeEntity(0).map {
             var cards = ArrayList<Card>()
             var users = ArrayList<User>()
             if ( it == null ) return@map Home(cards, users)
@@ -40,19 +39,19 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getFeeds(): LiveData<List<Card>> {
+    override fun getFeeds(): Flow<List<Card>> {
         requestCards(1, 20)
-        return Transformations.map(cardDao.getCardEntities()) {
+        return cardDao.getCardEntities().map {
             it.map { Card(it.id, it.user_id, it.img_url, it.description) }
         }
     }
 
-    override fun isLogin(): LiveData<Boolean> = Transformations.map(cardDao.getLogInEntity(0)) { when(it) {
+    override fun isLogin(): Flow<Boolean> = cardDao.getLogInEntity(0).map { when(it) {
         null -> false
         else -> it.login
     } }
 
-    override fun getCardDetail(id: Int): LiveData<CardDetail> {
+    override fun getCardDetail(id: Int): Flow<CardDetail> {
         CoroutineScope(Dispatchers.IO).launch {
             var respone = remoteRepo.requestCardDetail(id)
             cardDao.insertCardEntity(CardEntity(respone.card.id, respone.card.user_id,
@@ -84,7 +83,7 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getUser(id: Int) : LiveData<User> {
+    override fun getUser(id: Int) : Flow<User> {
         CoroutineScope(Dispatchers.IO).launch {
             var respone = remoteRepo.requestUserDetail(id)
             cardDao.insertUserEntity(UserEntity(respone.user.id, respone.user.nickname, respone.user.introduction))

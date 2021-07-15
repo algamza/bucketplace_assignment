@@ -1,16 +1,16 @@
 package com.github.algamza.bucketplace.data.local.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.github.algamza.bucketplace.data.local.entities.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CardDao {
     @Query("SELECT * FROM CardEntity")
-    fun getCardEntities() : LiveData<List<CardEntity>>
+    fun getCardEntities() : Flow<List<CardEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCardEntities(entities: List<CardEntity>)
@@ -25,7 +25,7 @@ interface CardDao {
     fun deleteCardEntities()
 
     @Query("SELECT * FROM UserEntity")
-    fun getUserEntities() : LiveData<List<UserEntity>>
+    fun getUserEntities() : Flow<List<UserEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertUserEntities(entities: List<UserEntity>)
@@ -37,7 +37,7 @@ interface CardDao {
     fun deleteUserEntities()
 
     @Query("SELECT * FROM HomeEntity WHERE id =:id")
-    fun getHomeEntity(id: Int) : LiveData<HomeEntity>
+    fun getHomeEntity(id: Int) : Flow<HomeEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertHomeEntity(entity: HomeEntity)
@@ -46,14 +46,14 @@ interface CardDao {
     fun deleteHomeEntity(id: Int)
 
     @Query("SELECT * FROM CardEntity WHERE id =:id")
-    fun getCardDetailEntity(id: Int) : LiveData<CardDetailEntity>
+    fun getCardDetailEntity(id: Int) : Flow<CardDetailEntity>
 
     @Query("SELECT * FROM UserEntity WHERE id =:id")
-    fun getUserDetailEntity(id: Int) : LiveData<UserEntity>
+    fun getUserDetailEntity(id: Int) : Flow<UserEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertLogInEntity(entity: LoginEntity)
 
     @Query("SELECT * FROM LoginEntity WHERE id =:id")
-    fun getLogInEntity(id: Int) : LiveData<LoginEntity>
+    fun getLogInEntity(id: Int) : Flow<LoginEntity>
 }
